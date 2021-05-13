@@ -5,6 +5,7 @@ from .serializers import *
 from .models import *
 from user.models import User
 from rest_framework.response import Response
+from datetime import datetime
 
 class addAdvisorView(generics.GenericAPIView):
     permission_classes = [permissions.IsAdminUser]
@@ -33,6 +34,9 @@ class bookAdvisorView(generics.GenericAPIView):
             advisor = Advisor.objects.get(id=advisor_id)
             user = User.objects.get(id=user_id)
             time = request.data['time']
+            current = datetime.now()
+            if time < current:
+                return Response({'message':'Date and time passed'},status=status.HTTP_400_BAD_REQUEST)
             if request.user.id == user_id:
                 data = {
                     "time": time,
