@@ -35,7 +35,7 @@ class bookAdvisorView(generics.GenericAPIView):
             user = User.objects.get(id=user_id)
             time = request.data['time']
             current = datetime.now()
-            if time < current:
+            if datetime.fromisoformat(time) < current:
                 return Response({'message':'Date and time passed'},status=status.HTTP_400_BAD_REQUEST)
             if request.user.id == user_id:
                 data = {
